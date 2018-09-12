@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "945608474011",
+    "firebase_url": "https://ciplabproject.firebaseio.com",
+    "project_id": "ciplabproject",
+    "storage_bucket": "ciplabproject.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:945608474011:android:d93493b6becffc93",
+        "android_client_info": {
+          "package_name": "com.siva.needred"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "945608474011-7hpuu9983gsk0ifedj7h4og4vojvlbth.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDx0xufjQyeGwpIOCgtY7c3_Tj6cYbz-Ds"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
