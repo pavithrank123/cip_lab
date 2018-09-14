@@ -104,9 +104,9 @@ public class FullscreenActivity extends AppCompatActivity {
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
                         final String userName = dataSnapshot.child("blood_group").getValue().toString();
-                        String blood = dataSnapshot.child("name").getValue().toString();
+                        final String blood = dataSnapshot.child("name").getValue().toString();
                         final String phone = dataSnapshot.child("mobile").getValue().toString();
-                        String address = dataSnapshot.child("amount").getValue().toString();
+                        final String address = dataSnapshot.child("amount").getValue().toString();
                         String hospital = dataSnapshot.child("hospital").getValue().toString();
                         //if (hospital.equalsIgnoreCase(mCurrent_user_id.toString())) {
                             helpViewHolder.setName(userName);
@@ -119,7 +119,7 @@ public class FullscreenActivity extends AppCompatActivity {
                                 @Override
                                 public void onClick(View view) {
 
-                                    CharSequence options[] = new CharSequence[]{"Donate", "Call", "Directions"};
+                                    CharSequence options[] = new CharSequence[]{"Donate", "Call", "Directions","Screenshot"};
 
                                     final AlertDialog.Builder builder = new AlertDialog.Builder(FullscreenActivity.this);
 
@@ -156,6 +156,17 @@ public class FullscreenActivity extends AppCompatActivity {
                                                             Uri.parse(url));
                                                     startActivity(intent);
                                             }
+                                            if(i == 3){
+                                                Intent profileIntent = new Intent(FullscreenActivity.this,ScreenShot.class);
+                                                profileIntent.putExtra("name",userName );
+                                                profileIntent.putExtra("blood", blood);
+//                                                    profileIntent.putExtra("hospital", "saas");
+                                                profileIntent.putExtra("mobile", phone);
+                                                profileIntent.putExtra("req", address+"Rs");
+                                                startActivity(profileIntent);
+
+                                            }
+
                                         }
                                     });
                                     builder.show();

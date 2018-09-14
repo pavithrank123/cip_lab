@@ -106,9 +106,9 @@ public class DonorListFragment extends Fragment {
                     public void onDataChange(DataSnapshot dataSnapshot) {
 
                         final String userName = dataSnapshot.child("name").getValue().toString();
-                        String blood=dataSnapshot.child("blood_group").getValue().toString();
-                        String phone=dataSnapshot.child("mobile").getValue().toString();
-                        String address=dataSnapshot.child("place").getValue().toString();
+                        final  String blood=dataSnapshot.child("blood_group").getValue().toString();
+                        final String phone=dataSnapshot.child("mobile").getValue().toString();
+                        final String address=dataSnapshot.child("place").getValue().toString();
                         final String url=dataSnapshot.child("address").getValue().toString();
                         final String hosp_id=dataSnapshot.child("id").getValue().toString();
                         donorsViewHolder.setName(userName);
@@ -152,6 +152,9 @@ public class DonorListFragment extends Fragment {
                                             startActivity(intent);
 
                                         }
+
+
+
 
 
 

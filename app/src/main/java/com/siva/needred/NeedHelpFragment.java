@@ -119,10 +119,10 @@ public class NeedHelpFragment extends Fragment {
                         @Override
                         public void onDataChange(DataSnapshot dataSnapshot) {
                             final String userName = dataSnapshot.child("blood_group").getValue().toString();
-                            String blood = dataSnapshot.child("name").getValue().toString();
+                            final String blood = dataSnapshot.child("name").getValue().toString();
                             final String phone = dataSnapshot.child("mobile").getValue().toString();
-                            String address = dataSnapshot.child("amount").getValue().toString();
-                            String hospital = dataSnapshot.child("hospital").getValue().toString();
+                            final String address = dataSnapshot.child("amount").getValue().toString();
+                            final String hospital = dataSnapshot.child("hospital").getValue().toString();
                            // if (hospital.equalsIgnoreCase(mCurrent_user_id.toString())) {
                                 helpViewHolder.setName(userName);
                                 helpViewHolder.setBlood(blood);
@@ -134,7 +134,7 @@ public class NeedHelpFragment extends Fragment {
                                     @Override
                                     public void onClick(View view) {
 
-                                        CharSequence options[] = new CharSequence[]{"Donate", "Call"};
+                                        CharSequence options[] = new CharSequence[]{"Donate", "Call","Screenshot"};
 
                                         final AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
 
@@ -165,11 +165,15 @@ public class NeedHelpFragment extends Fragment {
                                                     }
 
                                                 }
-                                               // if (i == 2) {
-                                                    //    Intent intent = new Intent(android.content.Intent.ACTION_VIEW,
-                                                    //            Uri.parse(address1));
-                                                    //    startActivity(intent);
-                                               // }
+                                                if (i == 2) {
+                                                    Intent profileIntent = new Intent(getContext(),ScreenShot.class);
+                                                    profileIntent.putExtra("name",userName );
+                                                    profileIntent.putExtra("blood", blood);
+//                                                    profileIntent.putExtra("hospital", "saas");
+                                                    profileIntent.putExtra("mobile", phone);
+                                                    profileIntent.putExtra("req", address+"Rs");
+                                                    startActivity(profileIntent);
+                                                }
                                             }
                                         });
                                         builder.show();

@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/screen"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
@@ -9,12 +10,7 @@
         android:layout_height="150dp"
         android:id="@+id/share"
         android:src="@drawable/share"/>
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/profName"
-        android:text="Name"
-        android:textSize="40dp"/>
+
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -25,21 +21,28 @@
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:id="@+id/profName"
+        android:text="Name"
+        android:textSize="35dp"/>
+
+   <!-- <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:id="@+id/profHospital"
         android:textSize="40dp"
-        android:text="Hospital"/>
+        android:text="Hospital"/>-->
 
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/profMobile"
-        android:textSize="40dp"
+        android:textSize="37dp"
         android:text="Mobile"/>
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/profRequirement"
-        android:textSize="40dp"
+        android:textSize="37dp"
         android:text="Requirement"/>
 
     <ImageView
