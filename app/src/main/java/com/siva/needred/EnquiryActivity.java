@@ -62,21 +62,27 @@ public class EnquiryActivity extends AppCompatActivity {
                 if(!TextUtils.isEmpty(blood)||!TextUtils.isEmpty(name)||!TextUtils.isEmpty(mobile)||
                         !TextUtils.isEmpty(place)){
 
-                        HashMap<String, String> userMap = new HashMap<>();
+                        final HashMap<String, String> userMap = new HashMap<>();
                         userMap.put("name", name);
                         userMap.put("blood_group", blood);
                         userMap.put("mobile", mobile);
                         userMap.put("amount", place);
                         userMap.put("hospital", mCurrentUser);
 
-                        mHelper.child("Help").child(getSaltString()).setValue(userMap).addOnCompleteListener(new OnCompleteListener<Void>() {
+                        mHelper.child("emergencies").child(mCurrentUser).child(getSaltString()).setValue(userMap).addOnCompleteListener(new OnCompleteListener<Void>() {
                             @Override
                             public void onComplete(@NonNull Task<Void> task) {
-                                mProgress.dismiss();
-                                Toast.makeText(getApplicationContext(), "Registered Successfully..!", Toast.LENGTH_LONG).show();
-                                Intent intent = new Intent(getApplicationContext(), MainActivity.class);
-                                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                                startActivity(intent);
+                                mHelper.child("Help").child(getSaltString()).setValue(userMap).addOnCompleteListener(new OnCompleteListener<Void>() {
+                                    @Override
+                                    public void onComplete(@NonNull Task<Void> task) {
+                                        mProgress.dismiss();
+                                        Toast.makeText(getApplicationContext(), "Registered Successfully..!", Toast.LENGTH_LONG).show();
+                                        Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+                                        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                                        startActivity(intent);
+                                    }
+                                });
+
                             }
                         });
 

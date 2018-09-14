@@ -31,8 +31,7 @@
         android:inputType="textCapWords"
         android:text="Display Name"
         android:textColor="@android:color/white"
-        android:textSize="24sp"
-        android:textStyle="bold" />
+        android:textSize="15sp"/>
 
     <TextView
         android:id="@+id/user_single_blood"

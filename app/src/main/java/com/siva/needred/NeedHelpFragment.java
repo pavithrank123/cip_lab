@@ -28,6 +28,7 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
 
@@ -36,11 +37,10 @@ public class NeedHelpFragment extends Fragment {
     FloatingActionButton floatingActionButton;
     private View mMainView;
     private RecyclerView mHelpList;
-    private DatabaseReference mUsersDatabase;
+    private DatabaseReference mUsersDatabase,someRef;
     private DatabaseReference mUsers;
 
     private FirebaseAuth mAuth;
-
     private String mCurrent_user_id;
 
     public NeedHelpFragment() {
@@ -70,12 +70,18 @@ public class NeedHelpFragment extends Fragment {
         //init
         mHelpList = (RecyclerView) mMainView.findViewById(R.id.need_recyclerview);
         mAuth = FirebaseAuth.getInstance();
-        mUsersDatabase = FirebaseDatabase.getInstance().getReference().child("Help");
-        mUsers = FirebaseDatabase.getInstance().getReference().child("Users");
         mCurrent_user_id = mAuth.getCurrentUser().getUid();
+        if(MainActivity.getAdminStatus()==true)
+        {
+            mUsersDatabase = FirebaseDatabase.getInstance().getReference().child("emergencies").child(mCurrent_user_id.toString());
+        }
+        else
+        {
+            mUsersDatabase = FirebaseDatabase.getInstance().getReference().child("Help");
+        }
 
-        //
-        mHelpList.setHasFixedSize(true);
+        mUsers = FirebaseDatabase.getInstance().getReference().child("Users");
+
         LinearLayoutManager linearVertical = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
         mHelpList.setLayoutManager(linearVertical);
 
@@ -83,6 +89,7 @@ public class NeedHelpFragment extends Fragment {
                 mHelpList.getContext(),
                 linearVertical.getOrientation()
         );
+
         mHelpList.addItemDecoration(mDividerItemDecoration);
 
         return mMainView;
@@ -102,81 +109,90 @@ public class NeedHelpFragment extends Fragment {
                 mUsersDatabase) {
             @Override
 
-            protected void populateViewHolder(final HelpViewHolder helpViewHolder, Help help, int i) {
+            protected void populateViewHolder(final HelpViewHolder helpViewHolder, final Help help, int i) {
                 helpViewHolder.setDate(help.getDate());
                 final String list_user_id = getRef(i).getKey();
-                mUsersDatabase.child(list_user_id).child("hospital").endAt(mCurrent_user_id).getRef().getParent().addValueEventListener(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(DataSnapshot dataSnapshot) {
-                        final String userName = dataSnapshot.child("name").getValue().toString();
-                        String blood = dataSnapshot.child("blood_group").getValue().toString();
-                        final String phone = dataSnapshot.child("mobile").getValue().toString();
-                        String address = dataSnapshot.child("amount").getValue().toString();
-                        String hospital = dataSnapshot.child("hospital").getValue().toString();
-                        if  (hospital.equalsIgnoreCase(mCurrent_user_id.toString())) {
-                            helpViewHolder.setName(userName);
-                            helpViewHolder.setBlood(blood);
-                            helpViewHolder.setAddress(address);
-                            helpViewHolder.setPhone(phone);
+                Log.e("Checking Hospital ==",getRef(i).child("hospital").toString());
+               // if(getRef(i).child("hospital").toString().equalsIgnoreCase(mCurrent_user_id.toString())) {
 
-                            helpViewHolder.mView.setOnClickListener(new View.OnClickListener() {
-                                @Override
-                                public void onClick(View view) {
+                mUsersDatabase.child(list_user_id).addValueEventListener(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(DataSnapshot dataSnapshot) {
+                            final String userName = dataSnapshot.child("blood_group").getValue().toString();
+                            String blood = dataSnapshot.child("name").getValue().toString();
+                            final String phone = dataSnapshot.child("mobile").getValue().toString();
+                            String address = dataSnapshot.child("amount").getValue().toString();
+                            String hospital = dataSnapshot.child("hospital").getValue().toString();
+                           // if (hospital.equalsIgnoreCase(mCurrent_user_id.toString())) {
+                                helpViewHolder.setName(userName);
+                                helpViewHolder.setBlood(blood);
+                                helpViewHolder.setAddress(address+"Rs");
+                                helpViewHolder.setPhone(phone);
+                                mHelpList.setVisibility(View.VISIBLE);
+                                helpViewHolder.mView.setVisibility(View.VISIBLE);
+                                helpViewHolder.mView.setOnClickListener(new View.OnClickListener() {
+                                    @Override
+                                    public void onClick(View view) {
 
-                                    CharSequence options[] = new CharSequence[]{"Email", "Call", "Directions"};
+                                        CharSequence options[] = new CharSequence[]{"Donate", "Call"};
 
-                                    final AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+                                        final AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
 
-                                    builder.setTitle("Select Options");
-                                    builder.setItems(options, new DialogInterface.OnClickListener() {
-                                        @Override
-                                        public void onClick(DialogInterface dialogInterface, int i) {
+                                        builder.setTitle("Select Options");
+                                        builder.setItems(options, new DialogInterface.OnClickListener() {
+                                            @Override
+                                            public void onClick(DialogInterface dialogInterface, int i) {
 
-                                            //Click Event for each item.
-                                            if (i == 0) {
-                                                //
-
-                                            }
-
-                                            if (i == 1) {
-
-                                                String uri = phone;
-
-
-                                                if (ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED) {
-
-                                                    Intent callIntent = new Intent(Intent.ACTION_DIAL, Uri.parse("tel:" + uri));
-                                                    // callIntent.setData(Uri.parse("tel:"+uri));
-                                                    callIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                                                    getActivity().startActivity(callIntent);
-
+                                                //Click Event for each item.
+                                                if (i == 0) {
+                                                    Intent intent = new Intent(android.content.Intent.ACTION_VIEW,
+                                                            Uri.parse("https://imjo.in/Ua2ERm"));
+                                                    startActivity(intent);
                                                 }
 
+                                                if (i == 1) {
+
+                                                    String uri = phone;
+
+
+                                                    if (ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED) {
+
+                                                        Intent callIntent = new Intent(Intent.ACTION_DIAL, Uri.parse("tel:" + uri));
+                                                        // callIntent.setData(Uri.parse("tel:"+uri));
+                                                        callIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                                                        getActivity().startActivity(callIntent);
+
+                                                    }
+
+                                                }
+                                               // if (i == 2) {
+                                                    //    Intent intent = new Intent(android.content.Intent.ACTION_VIEW,
+                                                    //            Uri.parse(address1));
+                                                    //    startActivity(intent);
+                                               // }
                                             }
-                                            if (i == 2) {
-                                                //    Intent intent = new Intent(android.content.Intent.ACTION_VIEW,
-                                                //            Uri.parse(address1));
-                                                //    startActivity(intent);
-                                            }
-                                        }
-                                    });
-                                    builder.show();
-                                }
-                            });
+                                        });
+                                        builder.show();
+                                    }
+                                });
+                           // } else {
+                                  //helpViewHolder.mView.setOnCheckChangedListener(null);
+                          //        helpViewHolder.mView.setVisibility(View.GONE);
+  //                                helpViewHolder.mView.setMinimumHeight(0);
+//
+    //                        }
                         }
-                        else
-                        {
-                          //  helpViewHolder.mView.setOnCheckChangedListener(null);
+
+                        @Override
+                        public void onCancelled(DatabaseError databaseError) {
                         }
-                    }
-                    @Override
-                    public void onCancelled(DatabaseError databaseError) {
-                    }
-                });
+                    });
+
+
+         //       }
             }
         };
         mHelpList.setAdapter(friendsRecyclerViewAdapter);
-
     }
 
     // viewholder class..
@@ -185,6 +201,7 @@ public class NeedHelpFragment extends Fragment {
 
     public static class HelpViewHolder extends RecyclerView.ViewHolder {
         View mView;
+
         public HelpViewHolder(View itemView) {
             super(itemView);
             mView = itemView;
@@ -204,7 +221,6 @@ public class NeedHelpFragment extends Fragment {
             userNameView.setText(phone);
         }
         public void setAddress(String address) {
-
             TextView userNameView = (TextView) mView.findViewById(R.id.help_place);
             address.toUpperCase();
             userNameView.setText(address.toUpperCase());

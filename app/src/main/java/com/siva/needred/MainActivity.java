@@ -53,7 +53,7 @@ public class MainActivity extends AppCompatActivity {
 
 
         //FIRE BASE
-        FirebaseUser currentUser = mAuth.getCurrentUser();
+        final FirebaseUser currentUser = mAuth.getCurrentUser();
 
 
         if(currentUser == null){
@@ -70,17 +70,19 @@ public class MainActivity extends AppCompatActivity {
                 public void onDataChange(DataSnapshot dataSnapshot) {
                     for(DataSnapshot childDataSnapshot :dataSnapshot.getChildren()){
                         //                       Log.e("The child 1 is ",childDataSnapshot.getKey());
-                        //                       Log.e("The child 1 is ",childDataSnapshot.child("admin").getValue().toString());
+                        //                       Log.e("The child. 1 is ",childDataSnapshot.child("admin").getValue().toString());
+                        String[] parts = currentUser.getEmail().split("@");
+                        String username_1 = parts[0];
+                        String username_2 = parts[1];
+                        String[] parts2 = username_2.split(".com");
                         if(mAuth.getCurrentUser().getEmail().equalsIgnoreCase(childDataSnapshot.child("admin").getValue().toString()))
                         {
                             isAdmin=true;
-                            getSupportActionBar().setTitle("A D M I N");
-
-
+                            getSupportActionBar().setTitle("WELCOME "+parts2[0].toUpperCase());
                         }
                         else
                         {
-
+                            getSupportActionBar().setTitle("WELCOME "+username_1.toUpperCase());
                         }
                     }
                     //Tabs
